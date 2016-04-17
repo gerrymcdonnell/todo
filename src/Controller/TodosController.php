@@ -53,9 +53,16 @@ class TodosController extends AppController {
  * @return void
  */
 	public function get($status = 0) {
-		$todos = $this->Todos->find('recent', ['status' => $status]);
+		
+		//query doesnt work
+		//$todos = $this->Todos->find('recent', ['status' => $status]);
+		
+		$todos = $this->Todos->findByIs_done($status);
+		
+		
 		$this->set(compact('todos'));
-		$this->set('_serialize', ['todos']);
+		$this->set('_serialize', 'todos');		
+		
 	}
 
 /**

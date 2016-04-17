@@ -1,16 +1,19 @@
 var TodoApp = {};
 
 (function(){
-	TodoApp.getTodos = function() { $.get('/todos/get.json', function(response) {
+	TodoApp.getTodos = function() { $.get('todos/get.json', function(response) {
 		$label = $('#incomplete-label');
 		$incompleteDiv = $('#incomplete-to-dos');
 		$incompleteDiv.empty();
-		if (response.todos.length === 0) {
+		
+		//console.log(response.length);
+		
+		if (response.length==0) {
 			$label.hide();
 			$incompleteDiv.append('<div class="incomplete-todo">All done. Have a nice day (or add a new to-do above).</div>');
 		} else {
 			$label.show();
-			$.each(response.todos, function(key, value) {
+			$.each(response, function(key, value) {
 				$incompleteDiv.append('<div class="incomplete-todo" id="incomplete-' + value.id +'"><label for="todo_' + value.id + '">' + value.todo + ' <input id="todo_' + value.id + '" class="todo-checked" type="checkbox" /></label><div class="small-done">' + value.created + '</div></div>');
 				$incompleteDiv.show('highlight');
 			});
@@ -18,17 +21,17 @@ var TodoApp = {};
 	});
 };
 
-	TodoApp.getDone = function() { $.get('/todos/get/1.json', function(response) {
+	TodoApp.getDone = function() { $.get('todos/get/1.json', function(response) {
 			$doneDiv = $('#done');
 			$doneDiv.empty();
-			$.each(response.todos, function(key, value) {
+			$.each(response, function(key, value) {
 				$doneDiv.append('<div class="finished-task"><div class="finshed-task-text">' + value.todo + '</div><div class="small">' + value.updated + '</div></div>');
 			});
 		});
 	};
 
 	TodoApp.finishTask = function(id) {
-		$.get('/todos/finish/' + id + '.json',
+		$.get('todos/finish/' + id + '.json',
 			function(response) {
 				if (response.response.result == 'success') {
 					$('#incomplete-' + id).hide('explode');
